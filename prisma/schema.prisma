@@ -1,0 +1,29 @@
+generator client {
+    provider = "prisma-client-js"
+    output   = "../generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model time_slots {
+    id       String     @id @default(uuid())
+    startsAt DateTime
+    endsAt   DateTime
+    bookings bookings[]
+}
+
+model bookings {
+    id           String     @id @default(uuid())
+    timeSlotId   String
+    timeSlot     time_slots @relation(fields: [timeSlotId], references: [id])
+    customerName String
+    customerEmail String
+    status TimeSlotStatus @default(active)
+}
+
+enum TimeSlotStatus {
+    active
+    cancelled
+}
